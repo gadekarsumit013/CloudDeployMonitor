@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CloudDeploy Monitor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="dashboard">
+
+    <h1>CloudDeploy Monitor</h1>
+
+    <p>
+        Welcome, {{ user_name }}
+    </p>
+
+
+    <!-- ================================= -->
+    <!-- Monitoring Cards -->
+    <!-- ================================= -->
+
+    <div class="cards">
+
+
+        <div class="dashboard-card">
+
+            <h3>Application Status</h3>
+
+            <p class="success">
+                ● {{ application_status }}
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>Server Status</h3>
+
+            <p class="success">
+                ● {{ server_status }}
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>CPU Usage</h3>
+
+            <p>
+                {{ cpu_usage }}%
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>Memory Usage</h3>
+
+            <p>
+                {{ memory_usage }}%
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>Docker Container</h3>
+
+            <p class="success">
+                ● {{ docker_status }}
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>Last Deployment</h3>
+
+            <p>
+                {{ deployment_status }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- Latest Deployment -->
+    <!-- ================================= -->
+
+    <div class="deployment-info">
+
+        <h2>Latest Deployment</h2>
+
+        <p>
+            <strong>Version:</strong>
+            {{ deployment_version }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {{ deployment_status }}
+        </p>
+
+        <p>
+            <strong>Time:</strong>
+            {{ deployment_time }}
+        </p>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- Deployment History -->
+    <!-- ================================= -->
+
+    <div class="table-section">
+
+        <h2>Deployment History</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Version</th>
+
+                    <th>Status</th>
+
+                    <th>Deployment Time</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for deployment in deployment_history %}
+
+                <tr>
+
+                    <td>
+                        {{ deployment.version }}
+                    </td>
+
+                    <td>
+
+                        {% if deployment.status == "SUCCESS" %}
+
+                            <span class="status-success">
+                                SUCCESS
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-failed">
+                                FAILED
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ deployment.deployment_time.strftime("%d-%m-%Y %H:%M") }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- Application Logs -->
+    <!-- ================================= -->
+
+    <div class="table-section">
+
+        <h2>Application Logs</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Type</th>
+
+                    <th>Message</th>
+
+                    <th>Time</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for log in application_logs %}
+
+                <tr>
+
+                    <td>
+                        {{ log.log_type }}
+                    </td>
+
+                    <td>
+                        {{ log.message }}
+                    </td>
+
+                    <td>
+                        {{ log.created_at.strftime("%d-%m-%Y %H:%M") }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- Logout -->
+
+    <a href="{{ url_for('logout') }}">
+
+        <button class="logout-btn">
+            Logout
+        </button>
+
+    </a>
+
+
+</div>
+
+</body>
+
+</html>
